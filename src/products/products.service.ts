@@ -7,6 +7,7 @@ import { Product } from './entities/product.entity';
 import { BadRequestException } from '@nestjs/common';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { validate as isUUID } from 'uuid';
+import { ProductImage } from './entities';
 
 
 @Injectable()
@@ -16,16 +17,25 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product) //para conectarnos a la base de datos
     private readonly productRepository: Repository<Product>,
+
+    @InjectRepository(ProductImage) //para conectarnos a la base de datos
+    private readonly productImageRepository: Repository<ProductImage>,
+
   ) { }
 
   async create(createProductDto: CreateProductDto) {
 
     try {
 
-      const p = this.productRepository.create(createProductDto)
+      const { images = [], ...productDetails } = createProductDto;
+
+      const p = this.productRepository.create({
+        ...productDetails,
+        images: images.map(image => this.productImageRepository.create({ url: image }))
+      })
       await this.productRepository.save(p)
 
-      return p;
+      return { ...p, images };
 
     } catch (error) {
       this.handleExceptions(error)
@@ -33,27 +43,42 @@ export class ProductsService {
   }
 
   //TODO: PAGINAR
-  findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto: PaginationDto) {
 
     const { limit = 10, offset = 0 } = paginationDto;
-    return this.productRepository.find({
+    const products = await this.productRepository.find({
       take: limit,
-      skip: offset
-      //TODO: relaciones
+      skip: offset,
+      // relaciones
+      relations: {
+        images: true //nombre de la relacion que esta en la entity
+      }
     })
+
+    return products.map(product => ({
+      ...product,
+      images: product.images.map(img => img.url)
+    }))
   }
 
   async findOne(term: string) {
     let product: Product;
     if (isUUID(term)) {
+      // findOneBy no permite poner las relaciones por eso toca habilitar el eagger en la entidad
       product = await this.productRepository.findOneBy({ id: term })
+
+      // este codigo sirve para las relaciones pero no es tan elegante
+      // product = await this.productRepository.findOne({ where:{ id: term}, relations:{images:true} })
+
     } else {
       // product = await this.productRepository.findOneBy({ slug: term })
-      const queryBuilder = this.productRepository.createQueryBuilder();
+      const queryBuilder = this.productRepository.createQueryBuilder('prod');
       product = await queryBuilder.where(`UPPER(title)=:title or slug=:slug`, {
         title: term.toUpperCase(),
         slug: term.toLowerCase()
-      }).getOne()
+      })
+        .leftJoinAndSelect('prod.images', 'prodImages') //esta me carga la relacion usando el queryBuilder y debo especificar el campo y ponerle un alias
+        .getOne()
     }
 
     // const p = await this.productRepository.findOneBy({ id: id });
@@ -65,7 +90,8 @@ export class ProductsService {
     //preload busca del producto por id 
     const product = await this.productRepository.preload({
       id: id,
-      ...updateProductDto
+      ...updateProductDto,
+      images: []
     })
 
     if (!product) throw new NotFoundException(`Producto con id ${id} no encontrado`)

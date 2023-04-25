@@ -4,13 +4,13 @@ import { ProductsController } from './products.controller';
 
 //para sincronizar los modelos a la bd
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Product } from './entities/product.entity';
+import { Product, ProductImage } from './entities'
 
 @Module({
   controllers: [ProductsController],
   providers: [ProductsService],
   imports: [
-    TypeOrmModule.forFeature([Product])
+    TypeOrmModule.forFeature([Product, ProductImage])
   ]
 })
 export class ProductsModule { }

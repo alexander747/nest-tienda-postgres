@@ -37,3 +37,7 @@ lerna-debug.log*
 nohup.out
 
 postgres
+
+dist
+
+test
