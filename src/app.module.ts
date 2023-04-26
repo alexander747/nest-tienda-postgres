@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './products/products.module';
 import { CommonModule } from './common/common.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { CommonModule } from './common/common.module';
       autoLoadEntities: true, //carga las entidades automaticamente en la base de datos
       synchronize: true //en produccion en false
     }), //para typeorm
-    ProductsModule, CommonModule,
+    ProductsModule, CommonModule, SeedModule,
   ],
 })
 export class AppModule { }

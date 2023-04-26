@@ -3,7 +3,8 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProductImage } from "./product-image.entity";
 
-@Entity()
+//se puede cambiar el nombre de la tabla de la base de datos
+@Entity({ name: 'products' })
 export class Product {
     @PrimaryGeneratedColumn('uuid')
     id: string;
