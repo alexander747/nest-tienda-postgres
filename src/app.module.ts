@@ -8,6 +8,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './products/products.module';
 import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
+import { FilesModule } from './files/files.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -23,7 +26,14 @@ import { SeedModule } from './seed/seed.module';
       autoLoadEntities: true, //carga las entidades automaticamente en la base de datos
       synchronize: true //en produccion en false
     }), //para typeorm
-    ProductsModule, CommonModule, SeedModule,
+
+    //para servir una carpeta publica npm i @nestjs/serve-static
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public') //public la carpeta que vamos a servir como publica
+    }),
+
+    //modulos de mi app 
+    ProductsModule, CommonModule, SeedModule, FilesModule,
   ],
 })
 export class AppModule { }
