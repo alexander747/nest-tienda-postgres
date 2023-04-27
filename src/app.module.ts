@@ -11,6 +11,7 @@ import { SeedModule } from './seed/seed.module';
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { join } from 'path';
     }),
 
     //modulos de mi app 
-    ProductsModule, CommonModule, SeedModule, FilesModule,
+    ProductsModule, CommonModule, SeedModule, FilesModule, AuthModule,
   ],
 })
 export class AppModule { }
