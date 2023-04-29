@@ -6,11 +6,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    //es un provider la verificacion del jwt y tambien lo exportamos para poder acceder desde otro lado
+    JwtStrategy
+  ],
   imports: [
+    ConfigModule, // para poder tener aceso a las variables de entorno 
     TypeOrmModule.forFeature([User]),//para tabla de la base de datos
 
     //para usar jwt como estrategia de verificacion de login 
@@ -51,7 +57,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
   ],
   exports: [
-    TypeOrmModule //para que la entidad de user pueda ser usado desde otro modulo   
+    //para que la entidad de user pueda ser usado desde otro modulo   
+    TypeOrmModule,
+    //exportamos el jwtStrategy para poder verificar desde otra lado
+    JwtStrategy,
+    PassportModule,
+    JwtModule
+
   ]
 })
 export class AuthModule { }

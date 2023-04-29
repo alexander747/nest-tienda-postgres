@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users') //nombre de la tabla
 export class User {
@@ -28,4 +28,15 @@ export class User {
     })
     roles: string[];
 
+
+    //antes de agregar o actualizar pasamos el correo minusculas y quitamos espacios
+    @BeforeInsert()
+    checkIfBeforeInsert() {
+        this.email = this.email.toLowerCase().trim()
+    }
+
+    @BeforeUpdate()
+    checkIfBeforeUpdate() {
+        this.email = this.email.toLowerCase().trim()
+    }
 }
