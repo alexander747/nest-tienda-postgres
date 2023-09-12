@@ -21,7 +21,7 @@ $ npm run test:cov
 ## Documentación 
 
 
-- importar y exportar entidades
+- importar y exportar entidades  
 para que una entidad pueda ser usada debe estar importada en el module.ts del paquete que la creo
 TypeOrmModule.forFeature([User]),//para tabla de la base de datos
 
