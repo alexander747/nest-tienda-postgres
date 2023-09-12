@@ -4,7 +4,7 @@
 -- Genera un modulo completo
 
 ```bash
-$ nest g res auth --no-spec
+nest g res auth --no-spec
 ```
 
 ```bash
