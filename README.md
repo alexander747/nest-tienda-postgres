@@ -25,8 +25,10 @@ $ npm run test:cov
 para que una entidad pueda ser usada debe estar importada en el module.ts del paquete que la creo
 TypeOrmModule.forFeature([User]),//para tabla de la base de datos
 
-y para que se pueda usar en otros servicios se debe exportar 
+y para que se pueda usar en otros servicios se debe exportar  
   exports: [
     //para que la entidad de user pueda ser usado desde otro modulo   
     TypeOrmModule,
   ]
+
+
