@@ -41,8 +41,9 @@ import { JwtStrategy } from './strategies/jwt.strategy';
      */
 
     JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
+      imports: [ConfigModule], // configModule es module que tiene las diferentes configuraciones como json, variables de entorno, este esta inyectado en el modulo principal
+      inject: [ConfigService], // ConfigService centralizo en un archivo las variables de entorno o puedo tener acceso a ellas
+      //inyecto las variables de entorno y las obtengo con el get
       useFactory: (configService: ConfigService) => {
         return {
           //llave secreta para firmar token

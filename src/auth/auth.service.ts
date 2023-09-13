@@ -35,7 +35,7 @@ export class AuthService {
 
       return {
         ...user,
-        token: this.getJwtToken({ email: user.email })
+        token: this.getJwtToken({ id: user.id })
       }
 
     } catch (error) {
@@ -46,10 +46,10 @@ export class AuthService {
 
   async loginService(loginUserDto: LoginUserDto) {
     const { password, email } = loginUserDto;
-
+    console.log("init login")
     const user = await this.userRepository.findOne({
       where: { email },
-      select: { email: true, password: true }
+      select: { email: true, password: true, id: true }
     })
 
     if (!user) throw new UnauthorizedException('Credenciales incorrectas email.')
@@ -62,7 +62,7 @@ export class AuthService {
 
     return {
       ...user,
-      token: this.getJwtToken({ email: user.email })
+      token: this.getJwtToken({ id: user.id })
     }
 
   }
