@@ -5,7 +5,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { RawHeaders, getUser } from './decorators/get-user.decorator';
 import { User } from './entities/user.entity';
 import { IncomingHttpHeaders } from 'http';
-import { UserRoleGuard } from './guards/user-role/user-role.guard';
+import { UserRoleGuard, UserRoleGuard2, UserRoleGuard3 } from './guards/user-role/user-role.guard';
+import { RoleProtected } from './decorators/role-protected/role-protected.decorator';
+import { ValidRoles } from './interfaces/valid-roles';
+import { AuthDecoratorCentralizado } from './decorators/auth.decorator';
 
 
 @Controller('auth')
@@ -50,10 +53,39 @@ export class AuthController {
 
 
   @Get('private2')
-  @SetMetadata('roles', ['admin', 'super-user']) //sirve para añadir informaicon extra al metodo o controlador que se va a ejcutar
+  @SetMetadata('roles', ['admin', 'super-user']) //sirve para añadir informaicon extra al metodo o controlador que se va a ejcutar y lo podemos obtener desde un guard desde el this.reflector.get('roles', context.getHandler());
   @UseGuards(AuthGuard(), UserRoleGuard) // nuestro guard personalizado no lo ejecutamos
   privateRoute2(
 
+    @getUser() user: User
+  ) {
+    return {
+      user
+    }
+  }
+
+
+  /**
+   * En esta ruta ya eliminamos la agregacion de los roles por metadata y mejora usamos un customDecorator creado por nosotros
+   */
+  @Get('private3')
+  @RoleProtected(ValidRoles.admin, ValidRoles.superUser)
+  @UseGuards(AuthGuard(), UserRoleGuard2) // nuestro guard personalizado no lo ejecutamos
+  privateRoute3(
+    @getUser() user: User
+  ) {
+    return {
+      user
+    }
+  }
+
+  /**
+ * En esta ruta ya eliminamos varios guards y hacemos solo uno para que haga todo
+ * https://docs.nestjs.com/custom-decorators#decorator-composition
+ */
+  @Get('private4')
+  @AuthDecoratorCentralizado(ValidRoles.user)
+  privateRoute4(
     @getUser() user: User
   ) {
     return {

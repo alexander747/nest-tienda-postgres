@@ -13,6 +13,12 @@ nest g res auth --no-spec
 nest g res gu auth/guards/userRole --no-spec
 ```
 
+-- Genera un decorador se le puede pasar la ruta en donde queremos crear el archivo
+
+```bash
+nest g d auth/decorators/roleProtected --no-spec
+```
+
 ```bash
 # unit tests
 $ npm run test
