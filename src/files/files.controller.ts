@@ -6,7 +6,9 @@ import { diskStorage } from 'multer';
 import { newNameFile } from './helpers/fileName.helper';
 import { Response } from 'express'
 import { ConfigService } from '@nestjs/config';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Files') // para categorizar las partes en la documentacion del swagger
 @Controller('files')
 export class FilesController {
 

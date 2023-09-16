@@ -9,8 +9,9 @@ import { UserRoleGuard, UserRoleGuard2, UserRoleGuard3 } from './guards/user-rol
 import { RoleProtected } from './decorators/role-protected/role-protected.decorator';
 import { ValidRoles } from './interfaces/valid-roles';
 import { AuthDecoratorCentralizado } from './decorators/auth.decorator';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('Auth') // para categorizar las partes en la documentacion del swagger
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
@@ -21,6 +22,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @ApiResponse({ status: 200, description: 'Logged' })
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.loginService(loginUserDto);
   }

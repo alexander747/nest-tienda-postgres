@@ -6,10 +6,12 @@ import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { AuthDecoratorCentralizado } from 'src/auth/decorators/auth.decorator';
 import { getUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/entities/user.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 /**
- * si no le paso un rol quiere decir que no se valida rol pero que si tiene que estar autenticado
- */
+ * si no le paso un rol quiere decir que no se valida rol pero que si tiene que estar autenticado AuthDecoratorCentralizado
+*/
+@ApiTags('Products') // para categorizar las partes en la documentacion del swagger
 @Controller('products')
 @AuthDecoratorCentralizado()
 export class ProductsController {
