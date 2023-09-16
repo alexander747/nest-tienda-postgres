@@ -17,6 +17,14 @@ export class UserRoleGuard implements CanActivate {
     console.log('UserRoleGuard')
     const validRoles: string[] = this.reflector.get('roles', context.getHandler()); // Roles agregados desde el metadata @SetMetadata('roles', ['admin', 'super-user'])
     console.log({ validRoles })
+    //si no hay roles que validar en la ruta
+    if (!validRoles) {
+      return true;
+    }
+    //si no hay roles que validar en la ruta
+    if (validRoles.length === 0) {
+      return true;
+    }
 
     //obtenemos el usuario del context 
     const req = context.switchToHttp().getRequest();
@@ -53,6 +61,15 @@ export class UserRoleGuard2 implements CanActivate {
     const validRoles: string[] = this.reflector.get(META_ROLES, context.getHandler()); // Roles agregados desde el decorador RoleProtected
     console.log({ validRoles })
 
+    //si no hay roles que validar en la ruta
+    if (!validRoles) {
+      return true;
+    }
+    //si no hay roles que validar en la ruta
+    if (validRoles.length === 0) {
+      return true;
+    }
+
     //obtenemos el usuario del context 
     const req = context.switchToHttp().getRequest();
     const user = req.user as User;
@@ -76,7 +93,6 @@ export class UserRoleGuard2 implements CanActivate {
 
 @Injectable()
 export class UserRoleGuard3 implements CanActivate {
-
   constructor(private readonly reflector: Reflector) {
 
   }
@@ -84,9 +100,20 @@ export class UserRoleGuard3 implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('UserRoleGuard')
+    console.log("UserRoleGuard3 llegando")
+
     const validRoles: string[] = this.reflector.get(META_ROLES, context.getHandler()); // Roles agregados desde el decorador RoleProtected
     console.log({ validRoles })
+    console.log("Context ===> ", context.getHandler());
+    //si no hay roles que validar en la ruta
+    if (!validRoles) {
+      return true;
+    }
+    //si no hay roles que validar en la ruta
+    if (validRoles.length === 0) {
+      return true;
+    }
+
 
     //obtenemos el usuario del context 
     const req = context.switchToHttp().getRequest();
@@ -95,6 +122,7 @@ export class UserRoleGuard3 implements CanActivate {
       throw new BadRequestException('User not found.')
     }
 
+    console.log("roles del usuario =>", user.roles)
     for (const role of user.roles) {
       if (validRoles.includes(role)) {
         return true

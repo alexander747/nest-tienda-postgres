@@ -1,7 +1,8 @@
 //esquema de la base de datos
 
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProductImage } from "./product-image.entity";
+import { User } from "src/auth/entities/user.entity";
 
 //se puede cambiar el nombre de la tabla de la base de datos
 @Entity({ name: 'products' })
@@ -48,6 +49,18 @@ export class Product {
         }
     )
     images?: ProductImage[]
+
+    /**
+     * Muchas productos pueden ser creados por un usuario por eso manyToOne
+     */
+    @ManyToOne(
+        () => User, //Debo decirle con que entidad va a relacionarse
+        (userActual) => userActual.product, // de la entiendad debo decirle que item es el que se relaciona
+        {
+            eager: true//cada vez que consulte un producto tambien me dice que usuario fue el que creo dicho producto
+        }
+    )
+    user: User
 
     //metodo que se ejecuta antes de insertar los datos en la entidad
     @BeforeInsert()

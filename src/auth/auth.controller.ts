@@ -84,13 +84,21 @@ export class AuthController {
  * https://docs.nestjs.com/custom-decorators#decorator-composition
  */
   @Get('private4')
-  @AuthDecoratorCentralizado(ValidRoles.user)
+  @AuthDecoratorCentralizado()
   privateRoute4(
     @getUser() user: User
   ) {
     return {
       user
     }
+  }
+
+  @Get('check-auth-status')
+  @AuthDecoratorCentralizado()
+  checkAuthStatus(
+    @getUser() user: User
+  ) {
+    return this.authService.checkAuthStatus(user)
   }
 
 }

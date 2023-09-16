@@ -5,10 +5,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserRoleGuard3 } from '../guards/user-role/user-role.guard';
 
 export function AuthDecoratorCentralizado(...roles: ValidRoles[]) {
-    console.log("AuthDecoratorCentralizado roles====>", roles)
+    const ROLES = roles ? roles : []
     return applyDecorators(
         //aqui los decoradoradores van sin la arroba ojo 
-        RoleProtected(...roles),
+        RoleProtected(...ROLES),
         UseGuards(AuthGuard(), UserRoleGuard3),
     );
 }

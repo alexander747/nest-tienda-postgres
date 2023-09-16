@@ -1,4 +1,5 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "src/products/entities";
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users') //nombre de la tabla
 export class User {
@@ -27,6 +28,15 @@ export class User {
         default: ['user']
     })
     roles: string[];
+
+    /**
+     * Un usuario puede crear muchos productos por eso oneToMany
+     */
+    @OneToMany(
+        () => Product,
+        (productoActual) => productoActual.user
+    )
+    product: Product;
 
 
     //antes de agregar o actualizar pasamos el correo minusculas y quitamos espacios
